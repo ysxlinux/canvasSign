@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>canvas签名写字</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/prism.css">
+<style>
+.header{ width: 100%; background-color: #C0CCDA; padding: 50px 0; color: #fff;font-size: 24px;margin-bottom: 40px; }
+.header h1{ margin: 0;font-size: 50px; }
+.row{ padding-bottom: 20px; border-bottom: 1px solid #eee; margin-bottom: 20px; }
+canvas{ display: block;margin-bottom: 10px; background-color: #f8f8f8;border: 1px solid #eee; }
+pre.code-toolbar{ max-height: 300px;margin-bottom: 15px;margin-top:0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+	<div class="container">
+		<h1>canvasSign</h1>
+		<p>canvas签名写字的jQuery插件&nbsp;&nbsp;<small>一个入职半年的前端小白写的，写的不好，不喜请喷</small></p>
+	</div>
+</div>
+<div class="container">
+	<h1>调用</h1>
+	<div class="row">
+		<div class="col-md-6">
+<pre><code class="language-js">
+	var c1 = document.getElementById('c1');
+	var sign = $.canvasSign(cl, config);
+	===
+	或
+	===
+	$('#c1').canvasSign(config);
+</code></pre>
+		</div>
+		<div class="col-md-6">
+			<canvas id="c1">当前浏览器不支持canvas，请更换或更新最新浏览器</canvas>
+		</div>
+	</div>
+	<h2>初始参数</h2>
+	<div class="row">
+	<div class="col-md-12">
+<pre><code class="language-js">
+	config = {
+		width : 400,	//canvas宽度
+		height: 200,	//canvas高度
+		lineWidth:5,	//笔画最大线条宽度
+		minLineWidth: 1,//最小线条宽度
+		maskIng: {		//遮罩 只能规定字体，并且只能垂直居中显示
+			isMask:false, //默认没有
+			maskText:'',  //遮罩text
+			maskLineHeight:40,	//遮罩text行高，默认40
+			maskFont:'bold 26px 微软雅黑', //遮罩字体
+			maskColor:'#fff'	//文本颜色
+		},
+		lineColor: 'block',	//线条颜色 默认黑色
+		bgColor:'rgba(0,0,0,0)', //背景颜色
+		bgImgSrc:null,	//背景图片 默认为空
+		bgRetain:false	//false ：在写的过程中会清空背景图片及背景颜色 true ：会保留背景图片及背景颜色
+	}
+</code></pre>
+	</div>
+	</div>
+	<h2>清除画布 clear()</h2>
+	<div class="row">
+		<div class="col-md-6">
+<pre><code class="language-js">
+	$('#c2').canvasSign();	//var sign2 = $.canvasSign($('#c2')[0])
+	$('#c2-clear').click(function(){
+		$('#c2').clear();	//sign2.clear();
+	});
+</code></pre>
+		</div>
+		<div class="col-md-6">
+			<canvas id="c2"></canvas>
+			<button type="button" id="c2-clear" class="btn btn-default">清除画布</button>
+		</div>
+	</div>
+	<h2>设置颜色 setLineColor()</h2>
+	<div class="row">
+		<div class="col-md-6">
+<pre><code class="language-js">
+	$('#c3').canvasSign();	//var sign3 = $.canvasSign($('#c3')[0])
+	$('#c3-clear').click(function(){
+		$('#c3').clear();	//sign3.clear()
+	});
+	$('#c3-yellow').click(function(){
+		$('#c3').setLineColor('yellow');//sign3.setLineColor('yellow');
+	});
+	$('#c3-red').click(function(){
+		$('#c3').setLineColor('#f00');	//sign3.setLineColor('#f00');
+	});
+</code></pre>
+		</div>
+		<div class="col-md-6">
+			<canvas id="c3"></canvas>
+			<button type="button" id="c3-clear" class="btn btn-default">清除画布</button>
+			<button type="button" id="c3-yellow" class="btn btn-warning">黄色</button>
+			<button type="button" id="c3-red" class="btn btn-danger">红色</button>
+		</div>
+	</div>
+	<h2>设置线条宽度 setLineWidth()</h2>
+	<div class="row">
+		<div class="col-md-6">
+<pre><code class="language-js">
+	$('#c4').canvasSign();	//var sign4 = $.canvasSign($('#c4')[0])
+	$('#c4-clear').click(function(){
+		$('#c4').clear();	//sign4.clear()
+	});
+	$('#c4-width1').click(function(){
+		$('#c4').setLineWidth(1);	//sign4.setLineWidth(1)
+	});
+	$('#c4-width10').click(function(){
+		$('#c4').setLineWidth(10);	//sign4.setLineWidth(10)
+	});
+</code></pre>
+		</div>
+		<div class="col-md-6">
+			<canvas id="c4"></canvas>
+			<button type="button" id="c4-clear" class="btn btn-default">清除画布</button>
+			<button type="button" id="c4-width1" class="btn btn-default">设置线条为最大1</button>
+			<button type="button" id="c4-width10" class="btn btn-default">设置线条为最大10</button>
+		</div>
+	</div>
+	<h2>设置mask isMasking()</h2>
+	<div class="row">
+		<div class="col-md-6">
+<pre><code class="language-js">
+	$('#c5').canvasSign({
+		maskIng: {
+			isMask:true,
+			maskText:'我是遮罩·写的时候我就消失了',	//注：换行用'·'分隔
+			maskColor: '#8e8e8e'
+		}
+	});
+	$('#c5-clear').click(function(){
+		$('#c5').isMasking({
+			isMask: true,
+			maskText:'我是遮罩·哈哈~我又出来了',
+			maskColor: "#f00"
+		}).clear();
+	});
+</code></pre>
+		</div>
+		<div class="col-md-6">
+			<canvas id="c5"></canvas>
+			<button type="button" id="c5-clear" class="btn btn-default">清除画布并显示mask</button>
+		</div>
+	</div>
+
+	<h2>获取dataURL</h2>
+	<div class="row">
+		<div class="col-md-6">
+<pre><code class="language-js">
+	$('#c6').canvasSign({
+		bgImgSrc:'banner.png',
+		bgRetain:true
+	});
+	//注：当要绘制背景图片时，canvas其实是跨域加载图片，，所以在getDataURL()需在允许跨域的服务器上使用
+	$('#c6-clear').click(function(){
+		$('#c6').clear();
+	});
+	$('#c6-getDataURL').click(function(){
+		var dataURL = $('#c6').getDataURL();
+		alert(dataURL);
+	});
+</code></pre>
+		</div>
+		<div class="col-md-6">
+			<canvas id="c6"></canvas>
+			<button type="button" id="c6-clear" class="btn btn-default">清除画布</button>
+			<button type="button" id="c6-getDataURL" class="btn btn-default">获取dataURL</button>
+		</div>
+	</div>
+</div>
+
+	
+</body>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/prism.js"></script>
+<script src="js/canvasSign.jquery.js"></script>
+<script>
+	$(function(){
+		$('#c1').canvasSign();
+		$('#c2').canvasSign();
+		$('#c2-clear').click(function(){
+			$('#c2').clear();
+		});
+
+		$('#c3').canvasSign();
+		$('#c3-clear').click(function(){
+			$('#c3').clear();
+		});
+		$('#c3-yellow').click(function(){
+			$('#c3').setLineColor('yellow');
+		});
+		$('#c3-red').click(function(){
+			$('#c3').setLineColor('#f00');
+		});
+
+		$('#c4').canvasSign();
+		$('#c4-clear').click(function(){
+			$('#c4').clear();
+		});
+		$('#c4-width1').click(function(){
+			$('#c4').setLineWidth(1);
+		});
+		$('#c4-width10').click(function(){
+			$('#c4').setLineWidth(10);
+		});
+
+		$('#c5').canvasSign({
+			maskIng: {
+				isMask:true,
+				maskText:'我是遮罩·写的时候我就消失了',
+				maskColor: '#8e8e8e'
+			}
+		});
+		$('#c5-clear').click(function(){
+			$('#c5').isMasking({
+				isMask: true,
+				maskText:'我是遮罩·哈哈~我又出来了',
+				maskColor: "#f00"
+			}).clear();
+		});
+
+		$('#c6').canvasSign({
+			bgImgSrc:'banner.png',
+			bgRetain:true
+		});
+		$('#c6-clear').click(function(){
+			$('#c6').clear();
+		});
+		$('#c6-getDataURL').click(function(){
+			var dataURL = $('#c6').getDataURL();
+			alert(dataURL);
+		});
+	})
+</script>
+</html>
